@@ -16,12 +16,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY . /src
 WORKDIR /src
 
-# The library's unit-test binary is large. Full debug info and many parallel rustc jobs run a 6 GB builder out of memory,
+# The library's unit-test binary is large. Full debug info and many parallel rustc jobs run a 4-6 GB builder out of memory,
 # so keep line tables (enough for backtraces) and cap the jobs.
 ENV RUST_BACKTRACE=1 \
     CARGO_TERM_COLOR=never \
     CARGO_PROFILE_DEV_DEBUG=line-tables-only \
-    CARGO_BUILD_JOBS=4
+    CARGO_BUILD_JOBS=2
 
 # Install the pinned toolchain, then every crate in Cargo.lock (including the fuzz member's), so later builds stay offline.
 RUN rustup show active-toolchain || rustup toolchain install \
